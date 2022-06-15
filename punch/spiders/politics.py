@@ -18,8 +18,8 @@ class PoliticsSpider(CrawlSpider):
 
    
     rules = (
-        Rule(LinkExtractor(restrict_xpaths="//h3[@class='entry-title']/a"), callback='parse_item', follow=True, process_request='set_user_agent'),
-        
+        Rule(LinkExtractor(restrict_xpaths="//h1[@class='post-title']/a"), callback='parse_item', follow=True, process_request='set_user_agent'),
+         Rule(LinkExtractor(restrict_xpaths="//h3[@class='entry-title']/a"), callback='parse_item', follow=True, process_request='set_user_agent')
     )
 
     def set_user_agent(self, request, spider):
@@ -31,11 +31,11 @@ class PoliticsSpider(CrawlSpider):
         newspaper = "Punch Newspaper"
         category = "Politics"
         yield {
-            'headine': response.xpath("//h1[@class='entry-title']/text()").get(),
-            'image_url': response.xpath("//picture[@class='entry-featured-image ']/img/@src").get(),
-            'authour': response.xpath("//div[@class='entry-author']/a/text()").get(),
-            'entry_date':response.xpath("//span[@class='entry-date']/span/text()").get(),
-            'description': response.xpath("//div[@class='entry-content']/p/text()").get(),
+            'headine': response.xpath("////h1[@class='post-title']/text()").get(),
+            'image_url': response.xpath("//div[@class='post-image-wrapper']/figure/img/@src").get(),
+            'authour': response.xpath("(//span[@class='post-author']/strong)[1]/text()").get(),
+            'posted_date':response.xpath("//span[@class='post-date']/text()").get(),
+            'description': response.xpath("(//div[@class='post-content']/p)[1]/text()").get(),
             'newspaper_name': newspaper,
             'category': category,
             'url': response.url
