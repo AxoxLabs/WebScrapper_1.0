@@ -4,8 +4,8 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
 
-class PoliticsSpider(CrawlSpider):
-    name = 'politics'
+class EntertainmentSpider(CrawlSpider):
+    name = 'entertainment'
     allowed_domains = ['punchng.com']
   
  
@@ -14,7 +14,7 @@ class PoliticsSpider(CrawlSpider):
 
 
     def start_requests(self):
-        yield scrapy.Request(url='https://punchng.com/topics/politics', headers={
+        yield scrapy.Request(url='https://punchng.com/topics/entertainment', headers={
             'User-Agent': self.user_agent
         })
 
@@ -31,12 +31,12 @@ class PoliticsSpider(CrawlSpider):
 
     def parse_item(self, response):
         newspaper = "Punch Newspaper"
-        category = "Politics"
+        category = "Entertainment"
         yield {
-            'headline': response.xpath("////h1[@class='post-title']/text()").get(),
+            'headine': response.xpath("////h1[@class='post-title']/text()").get(),
             'image_url': response.xpath("//div[@class='post-image-wrapper']/figure/img/@src").get(),
-            'authour': response.xpath("(//span[@class='post-author']/strong)[1]/text()[normalize-space()]").get().strip(),
-            'posted_date':response.xpath("//span[@class='post-date']/text()[normalize-space()]").get().strip(),
+            'authour': response.xpath("(//span[@class='post-author']/strong)[1]/text()").get(),
+            'posted_date':response.xpath("//span[@class='post-date']/text()").get(),
             'description': response.xpath("(//div[@class='post-content']/p)[1]/text()").get(),
             'newspaper_name': newspaper,
             'category': category,
